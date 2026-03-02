@@ -268,10 +268,21 @@ Inline-SVG-Icons folgen der Fluvia-Farbpalette:
 docs/
 ├── index.html              ← Hauptseite
 ├── Fluviaone.png           ← Logo (wird weiß invertiert im Hero)
-└── diagrams/               ← draw.io Dateien für den Viewer
-    ├── datei1.drawio
-    └── datei2.drawio
+└── diagrams/               ← EINZIGER Arbeitsort für draw.io Dateien
+    ├── freigegeben.drawio   (im diagrams-Array → auf der Seite sichtbar)
+    ├── entwurf.drawio       (NICHT im Array → unsichtbar, aber versioniert)
+    └── ...
 ```
+
+### Workflow für draw.io-Diagramme
+
+1. **Alle** `.drawio`-Dateien werden direkt in `docs/diagrams/` erstellt und bearbeitet
+2. **Freigabe** erfolgt durch Eintrag im `diagrams`-Array in `docs/index.html`
+3. **Nicht freigegebene** Dateien liegen im Ordner, sind aber auf der Seite unsichtbar
+4. Es gibt **keine Kopien** in anderen Ordnern (z.B. `Documentation/`)
+
+> **Wichtig:** `Documentation/` wird NICHT mehr für draw.io-Dateien verwendet.
+> Alle Diagramme leben ausschließlich in `docs/diagrams/`.
 
 ### Neue Seiten hinzufügen
 

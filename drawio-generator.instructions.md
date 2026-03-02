@@ -15,7 +15,7 @@ Diese Instruction definiert den visuellen Standard für alle draw.io-Diagramme
 im WoWiLift-Projekt. Alle generierten `.drawio`-Dateien MÜSSEN diesen
 Konventionen folgen, damit ein einheitliches Erscheinungsbild gewährleistet ist.
 
-> **Referenz-Datei:** `Documentation/reparaturprozess-flowchart.drawio`
+> **Referenz-Datei:** `docs/diagrams/reparaturprozess-flowchart.drawio`
 
 ## Dateistruktur
 
@@ -381,7 +381,7 @@ Wenn ein Diagramm angefragt wird, folge diesen Schritten:
 6. **Legende einfügen:** Erstelle Legende mit Farbfeld-Quadraten auf
    der rechten Seite des Diagramms.
 7. **Datei speichern:** Speichere als `.drawio`-Datei im Verzeichnis
-   `Documentation/`.
+   `docs/diagrams/`.
 8. **Validieren:** Prüfe, dass alle `source`/`target`-Referenzen auf
    existierende IDs zeigen und keine ID doppelt vergeben ist.
 
@@ -535,4 +535,4 @@ Wenn ein Diagramm angefragt wird, folge diesen Schritten:
 - [ ] Keine `shadow=1` Attribute?
 - [ ] Alle `source`/`target`-Referenzen zeigen auf existierende IDs?
 - [ ] Keine ID doppelt vergeben?
-- [ ] Datei im `Documentation/`-Verzeichnis gespeichert?
+- [ ] Datei im `docs/diagrams/`-Verzeichnis gespeichert?
