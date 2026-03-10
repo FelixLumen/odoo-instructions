@@ -133,17 +133,87 @@ Ordne jede Änderung einem bestehenden Abschnitt zu:
 3. Füge neuen HTML-Content ein oder aktualisiere bestehenden
 4. Aktualisiere das Datum im Metadaten-Banner
 
-### Schritt 4: Screenshots empfehlen
+### Schritt 4: Screenshots mit VS Code Browser erstellen
+
+Nutze die integrierte VS-Code-Browserfunktion für reproduzierbare Screenshots
+gegen den lokalen Odoo-Server (z.B. `http://127.0.0.1:8069`).
+
+**Vorgehen:**
+
+1. Relevante Seite im integrierten Browser öffnen (wenn möglich bestehende Session nutzen).
+2. Vor jedem Screenshot störende Hinweise schließen:
+   - Browser-Dialoge zu Benachrichtigungen ablehnen/schließen
+   - Push-/Permission-Hinweise im UI wegklicken, damit sie nicht im Bild sichtbar sind
+3. Für Form-Views immer mit einem passenden Musterdatensatz arbeiten:
+   - Datensatzname mit Präfix `DOKU - Muster ...`
+   - Inhalte anonymisiert und fachlich plausibel
+   - Keine sensiblen Personen- oder Vertragsdaten
+4. Zwei Varianten aufnehmen:
+    - Desktop (z.B. 1440x1024)
+    - Mobile (z.B. 390x844)
+5. Screenshots im Modul ablegen unter:
+    - `wowilift_custom/static/src/img/`
+6. Dateinamen konsistent vergeben:
+    - `vscode_browser_<kontext>_01_desktop.png`
+    - `vscode_browser_<kontext>_02_mobile.png`
+
+**Screenshot-Liste pro Abschnitt:**
 
 ```
 📸 Screenshot-Liste für Abschnitt X:
-1. [ ] Form-View von [Model] mit ausgefüllten Feldern
-2. [ ] List-View mit Beispieldaten
-3. [ ] Beispiel-Output (z.B. generierte Rechnung)
+1. [ ] Form-View von [Model] mit ausgefüllten Feldern (Desktop)
+2. [ ] List-View oder Prozessschritt (Desktop)
+3. [ ] Relevante Ansicht in Mobile-Breite
 ```
 
-Screenshots werden vom Kunden manuell direkt in Odoo eingefügt
-(in einem separaten Kind-Artikel, der nicht überschrieben wird).
+Hinweis: Für Listenansichten dürfen reale Datensatznamen verwendet werden,
+wenn keine sensiblen Daten enthalten sind.
+
+### Schritt 5: Screenshots in `knowledge_article.xml` einbinden
+
+Bette Screenshots direkt im HTML-Body des Artikels ein, damit sie bei
+Modul-Updates gemeinsam mit dem Text versioniert und deployt werden.
+
+Beispiel:
+
+```html
+<p><strong>Beispielansicht (Desktop)</strong></p>
+<p>
+     <img src="/wowilift_custom/static/src/img/vscode_browser_demo_01_desktop.png"
+            alt="Beispielansicht Desktop"
+            style="max-width: 100%; border: 1px solid #d9d9d9; border-radius: 6px;"/>
+</p>
+```
+
+Wenn ein Bild bewusst nicht im Hauptartikel gepflegt werden soll (z.B. sehr
+häufig wechselnde Testbilder), ist ein separater Kind-Artikel weiterhin
+möglich.
+
+### Schritt 6: Qualitätscheck vor Abschluss
+
+1. Keine sensiblen Daten im Screenshot (E-Mail, Telefonnummern, interne IDs).
+2. Bilder im Artikel sichtbar (Pfad beginnt mit `/wowilift_custom/static/src/img/`).
+3. Dateigröße sinnvoll halten (lesbar, aber ohne unnötig große Dateien).
+4. `Dokumentationsstand` im Metadaten-Banner aktualisiert.
+
+### Schritt 7: Optional GIFs für Abläufe erstellen
+
+Wenn ein Prozess besser als Abfolge verständlich ist (z.B. Button-Klick →
+Stage-Wechsel → Ergebnis), kann statt Einzelbildern ein kurzes GIF verwendet
+werden.
+
+**Empfehlung:**
+
+1. Länge: 3-10 Sekunden, klarer Start- und Endzustand.
+2. Nur den relevanten UI-Bereich aufzeichnen.
+3. Dateiname:
+    - `vscode_browser_<kontext>_flow_01.gif`
+4. Ablage:
+    - `wowilift_custom/static/src/img/`
+5. Einbindung analog zu PNG per `<img src="...gif" .../>`.
+
+Falls kein GIF-Tool verfügbar ist, alternativ eine nummerierte Bildsequenz
+verwenden (`..._step_01.png`, `..._step_02.png`, ...).
 
 ## Inhaltliche Regeln
 
@@ -170,3 +240,7 @@ Screenshots werden vom Kunden manuell direkt in Odoo eingefügt
 ❌ Markdown-Syntax im HTML verwenden
 ❌ Odoo-Artikel manuell editieren statt die XML-Datei
 ❌ `noupdate="1"` setzen (verhindert Updates)
+❌ Screenshots nur lokal speichern, ohne sie im Modul zu versionieren
+❌ Screenshots mit sichtbaren sensiblen Produktivdaten einchecken
+❌ Form-View-Screenshots ohne Musterdatensatz erstellen
+❌ Push-/Permission-Hinweise im finalen Screenshot sichtbar lassen
