@@ -1,31 +1,105 @@
 ---
-applyTo: "**/data/knowledge_article.xml"
+applyTo: "**/data/knowledge_article*.xml"
 ---
 
 # Odoo 19 – Dokumentation & Wissensdatenbank aktualisieren
 
+## ⚠️ PFLICHT: Dokumentation UND Changelog IMMER gemeinsam aktualisieren
+
+Bei jeder Änderung, die dokumentiert werden muss, sind **immer beide Dateien**
+zu aktualisieren:
+
+| Datei | Zweck | Pfad |
+|-------|-------|------|
+| **Dokumentation** | Fachliche Beschreibung aller Features (Abnahmeprotokoll) | `wowilift_custom/data/knowledge_article.xml` |
+| **Changelog** | Chronologische Änderungshistorie (neueste zuerst) | `wowilift_custom/data/knowledge_article_changelog.xml` |
+
+Beide Dateien verwenden `noupdate="0"` und werden bei jedem Modul-Update
+automatisch in die Odoo Wissensdatenbank übertragen.
+
+**Checkliste bei jedem Dokumentations-Update:**
+- [ ] `knowledge_article.xml` – Fachlicher Abschnitt aktualisiert/ergänzt
+- [ ] `knowledge_article.xml` – Abnahme-Block ergänzt (falls neues Feature)
+- [ ] `knowledge_article.xml` – Dokumentationsstand-Datum aktualisiert
+- [ ] `knowledge_article_changelog.xml` – Neuer Eintrag OBEN eingefügt
+- [ ] `knowledge_article_changelog.xml` – Stand-Datum aktualisiert
+
 ## Zweck
 
-Diese Instruction steuert den Prozess zur Aktualisierung des Knowledge-Artikels
-in `wowilift_custom/data/knowledge_article.xml`. Dieser XML-Data-Record wird bei
-jedem Modul-Update (`odoo-bin -u wowilift_custom`) automatisch in die Odoo
-Wissensdatenbank übertragen.
+Diese Instruction steuert den Prozess zur Aktualisierung der Knowledge-Artikel
+in `wowilift_custom/data/`. Diese XML-Data-Records werden bei jedem Modul-Update
+(`odoo-bin -u wowilift_custom`) automatisch in die Odoo Wissensdatenbank
+übertragen.
 
 ## Source of Truth
 
-Die **XML-Datei im Repository** ist die einzige Quelle der Wahrheit:
-`wowilift_custom/data/knowledge_article.xml`
+Die **XML-Dateien im Repository** sind die einzige Quelle der Wahrheit:
+- `wowilift_custom/data/knowledge_article.xml` (Dokumentation)
+- `wowilift_custom/data/knowledge_article_changelog.xml` (Changelog)
 
 Der alte Markdown-Artikel `Documentation/Wowilift_customizations.md` dient nur
-noch als Referenz. Alle Änderungen werden direkt in der XML-Datei vorgenommen.
+noch als Referenz. Alle Änderungen werden direkt in den XML-Dateien vorgenommen.
 
 ## Wichtig: noupdate="0"
 
-Der Record verwendet `noupdate="0"`, d.h. er wird bei **jedem** Modul-Update
+Beide Records verwenden `noupdate="0"`, d.h. sie werden bei **jedem** Modul-Update
 überschrieben. Manuelle Änderungen im Odoo-Editor gehen beim nächsten Update
-verloren. Das ist gewollt – die XML-Datei ist die Source of Truth.
+verloren. Das ist gewollt – die XML-Dateien sind die Source of Truth.
 
-## HTML-Struktur im Artikel
+## Changelog-Struktur (knowledge_article_changelog.xml)
+
+### Grundgerüst
+
+```xml
+<field name="body" type="html">
+    <div>
+        <!-- Metadaten-Banner -->
+        <div style="background-color: #d4edda; ...">
+            <strong>📋 WoWiLift Changelog – Stand: TT.MM.JJJJ</strong>
+        </div>
+
+        <h1>WoWiLift Changelog</h1>
+
+        <!-- Monats-Überschrift -->
+        <h2>Monat JJJJ</h2>
+
+        <!-- Tages-Einträge (neueste zuerst!) -->
+        <h3>TT.MM.JJJJ – Kurzbeschreibung</h3>
+        <ul>
+            <li><strong>Typ: Beschreibung (modul):</strong> Details</li>
+        </ul>
+    </div>
+</field>
+```
+
+### Regeln für Changelog-Einträge
+
+- **Neueste Einträge immer OBEN** (vor bestehenden Einträgen)
+- **Monats-Überschrift** (`<h2>`) nur einmal pro Monat, wiederverwendbar
+- **Tages-Eintrag** (`<h3>`) mit Datum und kurzer Zusammenfassung
+- **Einzelne Änderungen** als `<li>` mit Typ-Prefix:
+  - `Neu:` – Neues Feature oder Feld
+  - `Verbesserung:` – Erweiterung bestehender Funktionalität
+  - `Fix:` – Bugfix
+  - `Modulversionen:` – Versionsänderungen
+- **Modulname** immer in Klammern angeben: `(wowilift_pdf_helpdesk)`
+- **Feldnamen** als `<code>` markieren: `<code>fv_is_email_source</code>`
+- Keine sensiblen Daten, keine Git-Hashes
+
+### Beispiel Changelog-Eintrag
+
+```xml
+<!-- ── JJJJ-MM-TT ── -->
+<h3>TT.MM.JJJJ – Kurztitel der Änderungen</h3>
+<ul>
+    <li><strong>Neu: Feature-Name (modul):</strong>
+    Beschreibung was hinzugefügt wurde und warum.</li>
+    <li><strong>Verbesserung: Feature-Name (modul):</strong>
+    Was wurde verbessert und wie.</li>
+</ul>
+```
+
+## HTML-Struktur im Dokumentations-Artikel
 
 ### Grundgerüst
 
@@ -126,12 +200,20 @@ Ordne jede Änderung einem bestehenden Abschnitt zu:
 | NEU: Helpdesk/PDF-Parser | `wowilift_pdf_parser/` |
 | NEU: Einkauf | `purchase_order.py`, RFQ-Reports |
 
-### Schritt 3: HTML im XML aktualisieren
+### Schritt 3: Dokumentation (knowledge_article.xml) aktualisieren
 
 1. Lies `wowilift_custom/data/knowledge_article.xml`
 2. Finde den passenden Abschnitt (HTML-Kommentare markieren die Abschnitte)
 3. Füge neuen HTML-Content ein oder aktualisiere bestehenden
-4. Aktualisiere das Datum im Metadaten-Banner
+4. Bei neuen Features: Abnahme-Block des Abschnitts um Punkt ergänzen
+5. Aktualisiere das Datum im Metadaten-Banner (`Dokumentationsstand: TT.MM.JJJJ`)
+
+### Schritt 3b: Changelog (knowledge_article_changelog.xml) aktualisieren
+
+1. Lies `wowilift_custom/data/knowledge_article_changelog.xml`
+2. Füge neuen Tages-Eintrag **OBEN** ein (nach der Monats-Überschrift)
+3. Falls neuer Monat: Neue `<h2>`-Monatsüberschrift vor dem Eintrag einfügen
+4. Aktualisiere das Datum im Metadaten-Banner (`Stand: TT.MM.JJJJ`)
 
 ### Schritt 4: Screenshots mit VS Code Browser erstellen
 
@@ -194,7 +276,9 @@ möglich.
 1. Keine sensiblen Daten im Screenshot (E-Mail, Telefonnummern, interne IDs).
 2. Bilder im Artikel sichtbar (Pfad beginnt mit `/wowilift_custom/static/src/img/`).
 3. Dateigröße sinnvoll halten (lesbar, aber ohne unnötig große Dateien).
-4. `Dokumentationsstand` im Metadaten-Banner aktualisiert.
+4. `Dokumentationsstand` im Metadaten-Banner aktualisiert (knowledge_article.xml).
+5. Changelog-Eintrag vorhanden und Datum aktualisiert (knowledge_article_changelog.xml).
+6. **Beide** Dateien im selben Commit enthalten.
 
 ### Schritt 7: Optional GIFs für Abläufe erstellen
 
@@ -235,10 +319,12 @@ verwenden (`..._step_01.png`, `..._step_02.png`, ...).
 
 ## Anti-Patterns
 
-❌ Technische Implementierungsdetails einfügen
+❌ Nur Dokumentation ODER nur Changelog aktualisieren – **immer beides!**
+❌ Changelog-Einträge unten anhängen statt oben einfügen
+❌ Technische Implementierungsdetails in die Dokumentation einfügen
 ❌ Abgenommene Abschnitte inhaltlich ändern
 ❌ Markdown-Syntax im HTML verwenden
-❌ Odoo-Artikel manuell editieren statt die XML-Datei
+❌ Odoo-Artikel manuell editieren statt die XML-Dateien
 ❌ `noupdate="1"` setzen (verhindert Updates)
 ❌ Screenshots nur lokal speichern, ohne sie im Modul zu versionieren
 ❌ Screenshots mit sichtbaren sensiblen Produktivdaten einchecken
