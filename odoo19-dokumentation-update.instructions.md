@@ -23,6 +23,7 @@ automatisch in die Odoo Wissensdatenbank übertragen.
 - [ ] `knowledge_article.xml` – Dokumentationsstand-Datum aktualisiert
 - [ ] `knowledge_article_changelog.xml` – Neuer Eintrag OBEN eingefügt
 - [ ] `knowledge_article_changelog.xml` – Stand-Datum aktualisiert
+- [ ] **Modulversionen geprüft** – Alle geänderten Module haben eine erhöhte `version` in `__manifest__.py` (→ siehe `git-workflow.instructions.md` Schritt 4.5)
 
 ## Zweck
 
@@ -279,6 +280,14 @@ möglich.
 4. `Dokumentationsstand` im Metadaten-Banner aktualisiert (knowledge_article.xml).
 5. Changelog-Eintrag vorhanden und Datum aktualisiert (knowledge_article_changelog.xml).
 6. **Beide** Dateien im selben Commit enthalten.
+7. ⚠️ **Modulversionen prüfen vor dem Push** – Alle Module mit geänderten Dateien
+   haben eine erhöhte `version` in `__manifest__.py`, sonst werden die Änderungen
+   auf dem Server nicht aktiviert! Befehl zum Prüfen der betroffenen Module:
+   ```powershell
+   git diff --name-only origin/main HEAD | ForEach-Object { ($_ -split '/')[0] } | Sort-Object -Unique
+   ```
+   Anschließend für jedes Odoo-Modul in der Liste die Version in `__manifest__.py` prüfen und
+   ggf. anheben (z.B. `19.0.1.2.3` → `19.0.1.2.4`). Erst danach pushen.
 
 ### Schritt 7: Optional GIFs für Abläufe erstellen
 
